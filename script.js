@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    fetch('https://your-heroku-app-name.herokuapp.com/hobbies')
+    fetch('https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies')
         .then(response => response.json())
         .then(data => {
             const hobbyList = document.getElementById('hobby-list');
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function showHobbyDetails(hobbyId) {
-    fetch(`https://your-heroku-app-name.herokuapp.com/hobbies/${hobbyId}`)
+    fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies/${hobbyId}`)
         .then(response => response.json())
         .then(hobbyInfo => {
             document.getElementById('hobby-info').innerHTML = `
