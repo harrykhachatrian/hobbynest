@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const newHobbyForm = document.getElementById('new-hobby-form');
     const searchButton = document.getElementById('search-button');
     const notificationElement = document.getElementById('notification');
-    const hobbyDetailsElement = document.getElementById('hobby-details');
 
     let userId = 1; // Assuming a single user for simplicity. In a real app, manage user sessions.
 
@@ -26,9 +25,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 data.forEach(hobby => {
                     const li = document.createElement('li');
                     const a = document.createElement('a');
-                    a.href = '#';
+                    a.href = `hobby-details.html?id=${hobby.id}`;
                     a.textContent = hobby.name;
-                    a.dataset.id = hobby.id;
                     li.appendChild(a);
                     hobbyList.appendChild(li);
                 });
@@ -45,9 +43,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 data.forEach(hobby => {
                     const li = document.createElement('li');
                     const a = document.createElement('a');
-                    a.href = '#';
+                    a.href = `hobby-details.html?id=${hobby.id}`;
                     a.textContent = hobby.name;
-                    a.dataset.id = hobby.id;
                     li.appendChild(a);
                     trendingHobbyList.appendChild(li);
                 });
@@ -64,42 +61,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 data.forEach(hobby => {
                     const li = document.createElement('li');
                     const a = document.createElement('a');
-                    a.href = '#';
+                    a.href = `hobby-details.html?id=${hobby.id}`;
                     a.textContent = hobby.name;
-                    a.dataset.id = hobby.id;
                     li.appendChild(a);
                     hiddenGemsList.appendChild(li);
-                });
-            });
-    }
-
-    // Fetch hobby details and track exploration
-    function showHobbyDetails(hobbyId) {
-        fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies/${hobbyId}`)
-            .then(response => response.json())
-            .then(hobbyInfo => {
-                hobbyDetailsElement.innerHTML = `
-                    <h3>${hobbyInfo.name}</h3>
-                    <p>${hobbyInfo.description}</p>
-                    <p>Location: ${hobbyInfo.location}</p>
-                    <p>Contact: ${hobbyInfo.contact}</p>
-                    <h4>Available Dates and Times</h4>
-                    <ul>
-                        ${hobbyInfo.dates.map(dateInfo => `
-                            <li>${dateInfo.date}: ${dateInfo.times.join(', ')}</li>
-                        `).join('')}
-                    </ul>
-                `;
-                document.getElementById('hobbies').style.display = 'none';
-                hobbyDetailsElement.style.display = 'block';
-                
-                // Track hobby exploration
-                fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}/explore`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ hobbyId })
                 });
             });
     }
@@ -115,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.json())
         .then(hobby => {
-            showHobbyDetails(hobby.id);
+            window.location.href = `hobby-details.html?id=${hobby.id}`;
             loadTrendingHobbies();
             loadHiddenGems();
         })
@@ -246,13 +211,8 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('hobby-list').addEventListener('click', function(event) {
         if (event.target.tagName === 'A') {
             const hobbyId = event.target.dataset.id;
-            showHobbyDetails(hobbyId);
+            window.location.href = `hobby-details.html?id=${hobbyId}`;
         }
-    });
-
-    document.getElementById('back-button').addEventListener('click', function() {
-        document.getElementById('hobbies').style.display = 'block';
-        hobbyDetailsElement.style.display = 'none';
     });
 
     viewUserButton.addEventListener('click', function() {
@@ -309,9 +269,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 data.forEach(hobby => {
                     const li = document.createElement('li');
                     const a = document.createElement('a');
-                    a.href = '#';
+                    a.href = `hobby-details.html?id=${hobby.id}`;
                     a.textContent = hobby.name;
-                    a.dataset.id = hobby.id;
                     li.appendChild(a);
                     supplierHobbyList.appendChild(li);
                 });
