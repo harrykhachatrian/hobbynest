@@ -83,17 +83,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function handleSearch() {
         const query = document.getElementById('search-bar').value.toLowerCase();
-        const hobbies = document.querySelectorAll('#hobby-list li');
-        let hobbyFound = false;
-        hobbies.forEach(hobby => {
-            const name = hobby.textContent.toLowerCase();
-            hobby.style.display = name.includes(query) ? '' : 'none';
-            if (name.includes(query)) {
-                hobbyFound = true;
-            }
-        });
-
-        if (!hobbyFound) {
+        fetch('https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies/search', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name: query })
+        })
+        .then(response => response.json())
+        .then(hobby => {
+            showHobbyDetails(hobby.id);
+            loadTrendingHobbies();
+            loadHiddenGems();
+        })
+        .catch(() => {
             if (confirm(`Sorry, ${query} is not yet offered, do you want to add it to your wishlist?`)) {
                 fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}/wishlist`, {
                     method: 'POST',
@@ -106,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function() {
                       loadWishlist(user.wishlist);
                   });
             }
-        }
+        });
     }
 
     function loadWishlist(wishlist) {
