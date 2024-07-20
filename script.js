@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const newHobbyForm = document.getElementById('new-hobby-form');
     const searchButton = document.getElementById('search-button');
     const notificationElement = document.getElementById('notification');
+    const hobbyDetailsElement = document.getElementById('hobby-details');
 
     let userId = 1; // Assuming a single user for simplicity. In a real app, manage user sessions.
 
@@ -41,6 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 data.forEach(hobby => {
                     const li = document.createElement('li');
                     li.textContent = hobby.name;
+                    li.dataset.id = hobby.id;
                     trendingHobbyList.appendChild(li);
                 });
             });
@@ -56,6 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 data.forEach(hobby => {
                     const li = document.createElement('li');
                     li.textContent = hobby.name;
+                    li.dataset.id = hobby.id;
                     hiddenGemsList.appendChild(li);
                 });
             });
@@ -66,14 +69,20 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies/${hobbyId}`)
             .then(response => response.json())
             .then(hobbyInfo => {
-                document.getElementById('hobby-info').innerHTML = `
+                hobbyDetailsElement.innerHTML = `
                     <h3>${hobbyInfo.name}</h3>
                     <p>${hobbyInfo.description}</p>
                     <p>Location: ${hobbyInfo.location}</p>
                     <p>Contact: ${hobbyInfo.contact}</p>
+                    <h4>Available Dates and Times</h4>
+                    <ul>
+                        ${hobbyInfo.dates.map(dateInfo => `
+                            <li>${dateInfo.date}: ${dateInfo.times.join(', ')}</li>
+                        `).join('')}
+                    </ul>
                 `;
                 document.getElementById('hobbies').style.display = 'none';
-                document.getElementById('hobby-details').style.display = 'block';
+                hobbyDetailsElement.style.display = 'block';
                 
                 // Track hobby exploration
                 fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}/explore`, {
@@ -234,7 +243,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('back-button').addEventListener('click', function() {
         document.getElementById('hobbies').style.display = 'block';
-        document.getElementById('hobby-details').style.display = 'none';
+        hobbyDetailsElement.style.display = 'none';
     });
 
     viewUserButton.addEventListener('click', function() {
@@ -291,10 +300,66 @@ document.addEventListener('DOMContentLoaded', function() {
                 data.forEach(hobby => {
                     const li = document.createElement('li');
                     li.textContent = `${hobby.name} - ${hobby.description}`;
+                    li.dataset.id = hobby.id;
                     supplierHobbyList.appendChild(li);
                 });
             });
     }
+
+    function showSupplierHobbyDetails(hobbyId) {
+        fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies/${hobbyId}`)
+            .then(response => response.json())
+            .then(hobbyInfo => {
+                const hobbyDetailsElement = document.getElementById('hobby-details');
+                hobbyDetailsElement.innerHTML = `
+                    <h3>Edit Hobby: ${hobbyInfo.name}</h3>
+                    <form id="edit-hobby-form">
+                        <label for="edit-description">Description:</label>
+                        <input type="text" id="edit-description" value="${hobbyInfo.description}">
+                        <label for="edit-dates">Dates and Times:</label>
+                        <textarea id="edit-dates">${hobbyInfo.dates.map(dateInfo => `${dateInfo.date}: ${dateInfo.times.join(', ')}`).join('\n')}</textarea>
+                        <button type="submit">Update</button>
+                    </form>
+                `;
+                document.getElementById('hobbies').style.display = 'none';
+                hobbyDetailsElement.style.display = 'block';
+
+                const editHobbyForm = document.getElementById('edit-hobby-form');
+                editHobbyForm.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    const updatedHobby = {
+                        description: document.getElementById('edit-description').value,
+                        dates: document.getElementById('edit-dates').value.split('\n').map(line => {
+                            const [date, times] = line.split(': ');
+                            return {
+                                date,
+                                times: times.split(', ')
+                            };
+                        })
+                    };
+
+                    fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies/${hobbyId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(updatedHobby)
+                    }).then(response => response.json())
+                      .then(data => {
+                          console.log('Hobby updated:', data);
+                          hobbyDetailsElement.style.display = 'none';
+                          loadSupplierHobbies();
+                      });
+                });
+            });
+    }
+
+    document.getElementById('supplier-hobby-list').addEventListener('click', function(event) {
+        if (event.target.tagName === 'LI') {
+            const hobbyId = event.target.dataset.id;
+            showSupplierHobbyDetails(hobbyId);
+        }
+    });
 
     loadHobbies();
     loadTrendingHobbies();
