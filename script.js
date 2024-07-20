@@ -25,11 +25,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 hobbyList.innerHTML = '';
                 data.forEach(hobby => {
                     const li = document.createElement('li');
-                    li.textContent = hobby.name;
-                    li.dataset.id = hobby.id;
-                    li.addEventListener('click', function() {
+                    const a = document.createElement('a');
+                    a.href = '#';
+                    a.textContent = hobby.name;
+                    a.dataset.id = hobby.id;
+                    a.addEventListener('click', function() {
                         showHobbyDetails(hobby.id);
                     });
+                    li.appendChild(a);
                     hobbyList.appendChild(li);
                 });
             });
@@ -44,11 +47,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 trendingHobbyList.innerHTML = '';
                 data.forEach(hobby => {
                     const li = document.createElement('li');
-                    li.textContent = hobby.name;
-                    li.dataset.id = hobby.id;
-                    li.addEventListener('click', function() {
+                    const a = document.createElement('a');
+                    a.href = '#';
+                    a.textContent = hobby.name;
+                    a.dataset.id = hobby.id;
+                    a.addEventListener('click', function() {
                         showHobbyDetails(hobby.id);
                     });
+                    li.appendChild(a);
                     trendingHobbyList.appendChild(li);
                 });
             });
@@ -63,11 +69,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 hiddenGemsList.innerHTML = '';
                 data.forEach(hobby => {
                     const li = document.createElement('li');
-                    li.textContent = hobby.name;
-                    li.dataset.id = hobby.id;
-                    li.addEventListener('click', function() {
+                    const a = document.createElement('a');
+                    a.href = '#';
+                    a.textContent = hobby.name;
+                    a.dataset.id = hobby.id;
+                    a.addEventListener('click', function() {
                         showHobbyDetails(hobby.id);
                     });
+                    li.appendChild(a);
                     hiddenGemsList.appendChild(li);
                 });
             });
@@ -244,7 +253,7 @@ document.addEventListener('DOMContentLoaded', function() {
     searchButton.addEventListener('click', handleSearch);
 
     document.getElementById('hobby-list').addEventListener('click', function(event) {
-        if (event.target.tagName === 'LI') {
+        if (event.target.tagName === 'A') {
             const hobbyId = event.target.dataset.id;
             showHobbyDetails(hobbyId);
         }
@@ -308,11 +317,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 supplierHobbyList.innerHTML = '';
                 data.forEach(hobby => {
                     const li = document.createElement('li');
-                    li.textContent = `${hobby.name} - ${hobby.description}`;
-                    li.dataset.id = hobby.id;
-                    li.addEventListener('click', function() {
+                    const a = document.createElement('a');
+                    a.href = '#';
+                    a.textContent = hobby.name;
+                    a.dataset.id = hobby.id;
+                    a.addEventListener('click', function() {
                         showSupplierHobbyDetails(hobby.id);
                     });
+                    li.appendChild(a);
                     supplierHobbyList.appendChild(li);
                 });
             });
@@ -367,7 +379,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     document.getElementById('supplier-hobby-list').addEventListener('click', function(event) {
-        if (event.target.tagName === 'LI') {
+        if (event.target.tagName === 'A') {
             const hobbyId = event.target.dataset.id;
             showSupplierHobbyDetails(hobbyId);
         }
