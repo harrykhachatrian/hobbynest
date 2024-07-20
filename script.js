@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const addHobbyButton = document.getElementById('add-hobby-button');
     const addHobbyForm = document.getElementById('add-hobby-form');
     const newHobbyForm = document.getElementById('new-hobby-form');
+    const searchButton = document.getElementById('search-button');
 
     let userId = 1; // Assuming a single user for simplicity. In a real app, manage user sessions.
 
@@ -80,6 +81,59 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
+    function handleSearch() {
+        const query = document.getElementById('search-bar').value.toLowerCase();
+        const hobbies = document.querySelectorAll('#hobby-list li');
+        let hobbyFound = false;
+        hobbies.forEach(hobby => {
+            const name = hobby.textContent.toLowerCase();
+            hobby.style.display = name.includes(query) ? '' : 'none';
+            if (name.includes(query)) {
+                hobbyFound = true;
+            }
+        });
+
+        if (!hobbyFound) {
+            if (confirm(`Sorry, ${query} is not yet offered, do you want to add it to your wishlist?`)) {
+                fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}/wishlist`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ hobbyName: query })
+                }).then(response => response.json())
+                  .then(user => {
+                      loadWishlist(user.wishlist);
+                  });
+            }
+        }
+    }
+
+    function loadWishlist(wishlist) {
+        const wishlistElement = document.getElementById('wishlist');
+        wishlistElement.innerHTML = '';
+        wishlist.forEach(item => {
+            const li = document.createElement('li');
+            li.textContent = item;
+            const removeButton = document.createElement('button');
+            removeButton.textContent = 'Remove';
+            removeButton.onclick = function() {
+                fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}/wishlist`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ hobbyName: item })
+                }).then(response => response.json())
+                  .then(user => {
+                      loadWishlist(user.wishlist);
+                  });
+            };
+            li.appendChild(removeButton);
+            wishlistElement.appendChild(li);
+        });
+    }
+
     document.getElementById('search-bar').addEventListener('input', function() {
         const query = this.value.toLowerCase();
         const hobbies = document.querySelectorAll('#hobby-list li');
@@ -88,6 +142,8 @@ document.addEventListener('DOMContentLoaded', function() {
             hobby.style.display = name.includes(query) ? '' : 'none';
         });
     });
+
+    searchButton.addEventListener('click', handleSearch);
 
     document.getElementById('hobby-list').addEventListener('click', function(event) {
         if (event.target.tagName === 'LI') {
