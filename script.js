@@ -7,8 +7,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const addHobbyForm = document.getElementById('add-hobby-form');
     const newHobbyForm = document.getElementById('new-hobby-form');
     const searchButton = document.getElementById('search-button');
+    const notificationElement = document.getElementById('notification');
 
     let userId = 1; // Assuming a single user for simplicity. In a real app, manage user sessions.
+
+    function formatHobbyName(name) {
+        return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+    }
 
     // Fetch and display hobbies for user view
     function loadHobbies() {
@@ -82,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function handleSearch() {
-        const query = document.getElementById('search-bar').value.toLowerCase();
+        const query = formatHobbyName(document.getElementById('search-bar').value);
         fetch('https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies/search', {
             method: 'POST',
             headers: {
@@ -142,6 +147,18 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(user => {
                 loadWishlist(user.wishlist);
+                if (user.notification) {
+                    displayNotification(user.notification);
+                    // Clear the notification after displaying it
+                    user.notification = null;
+                    fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(user)
+                    });
+                }
             });
     }
 
@@ -187,6 +204,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     supplierWishlist.appendChild(li);
                 });
             });
+    }
+
+    function displayNotification(message) {
+        notificationElement.textContent = message;
+        notificationElement.style.display = 'block';
+        setTimeout(() => {
+            notificationElement.style.display = 'none';
+        }, 5000); // Display for 5 seconds
     }
 
     document.getElementById('search-bar').addEventListener('input', function() {
@@ -236,7 +261,7 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();
         const formData = new FormData(newHobbyForm);
         const newHobby = {
-            name: formData.get('name'),
+            name: formatHobbyName(formData.get('name')),
             description: formData.get('description'),
             location: formData.get('location'),
             contact: formData.get('contact')
