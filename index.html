@@ -10,20 +10,41 @@
     <header>
         <h1>HobbyNest</h1>
         <nav>
-            <a href="#" id="login-link">Login</a>
-            <a href="#" id="signup-link">Sign Up</a>
+            <a href="#" id="view-user">View as User</a>
+            <a href="#" id="view-supplier">View as Supplier</a>
         </nav>
     </header>
     <main>
-        <section id="hobbies">
-            <h2>Explore Hobbies</h2>
+        <section id="user-view">
+            <h2>User View: Explore Hobbies</h2>
             <input type="text" id="search-bar" placeholder="Search hobbies...">
             <ul id="hobby-list"></ul>
+            <section id="hobby-details" style="display:none;">
+                <h2>Hobby Details</h2>
+                <div id="hobby-info"></div>
+                <button id="back-button">Back</button>
+            </section>
         </section>
-        <section id="hobby-details" style="display:none;">
-            <h2>Hobby Details</h2>
-            <div id="hobby-info"></div>
-            <button id="back-button">Back</button>
+        <section id="supplier-view" style="display:none;">
+            <h2>Supplier View: Manage Hobbies</h2>
+            <!-- Supplier content goes here -->
+            <ul id="supplier-hobby-list"></ul>
+            <button id="add-hobby-button">Add Hobby</button>
+            <!-- Form to add hobby -->
+            <div id="add-hobby-form" style="display:none;">
+                <h3>Add a New Hobby</h3>
+                <form id="new-hobby-form">
+                    <label for="hobby-name">Hobby Name:</label>
+                    <input type="text" id="hobby-name" name="name" required>
+                    <label for="hobby-description">Description:</label>
+                    <input type="text" id="hobby-description" name="description" required>
+                    <label for="hobby-location">Location:</label>
+                    <input type="text" id="hobby-location" name="location" required>
+                    <label for="hobby-contact">Contact:</label>
+                    <input type="text" id="hobby-contact" name="contact" required>
+                    <button type="submit">Submit</button>
+                </form>
+            </div>
         </section>
     </main>
     <script src="script.js"></script>
