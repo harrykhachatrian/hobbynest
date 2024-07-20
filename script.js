@@ -29,9 +29,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     a.href = '#';
                     a.textContent = hobby.name;
                     a.dataset.id = hobby.id;
-                    a.addEventListener('click', function() {
-                        showHobbyDetails(hobby.id);
-                    });
                     li.appendChild(a);
                     hobbyList.appendChild(li);
                 });
@@ -51,9 +48,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     a.href = '#';
                     a.textContent = hobby.name;
                     a.dataset.id = hobby.id;
-                    a.addEventListener('click', function() {
-                        showHobbyDetails(hobby.id);
-                    });
                     li.appendChild(a);
                     trendingHobbyList.appendChild(li);
                 });
@@ -73,9 +67,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     a.href = '#';
                     a.textContent = hobby.name;
                     a.dataset.id = hobby.id;
-                    a.addEventListener('click', function() {
-                        showHobbyDetails(hobby.id);
-                    });
                     li.appendChild(a);
                     hiddenGemsList.appendChild(li);
                 });
@@ -243,10 +234,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('search-bar').addEventListener('input', function() {
         const query = this.value.toLowerCase();
-        const hobbies = document.querySelectorAll('#hobby-list li');
+        const hobbies = document.querySelectorAll('#hobby-list li a');
         hobbies.forEach(hobby => {
             const name = hobby.textContent.toLowerCase();
-            hobby.style.display = name.includes(query) ? '' : 'none';
+            hobby.parentElement.style.display = name.includes(query) ? '' : 'none';
         });
     });
 
@@ -321,9 +312,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     a.href = '#';
                     a.textContent = hobby.name;
                     a.dataset.id = hobby.id;
-                    a.addEventListener('click', function() {
-                        showSupplierHobbyDetails(hobby.id);
-                    });
                     li.appendChild(a);
                     supplierHobbyList.appendChild(li);
                 });
