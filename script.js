@@ -137,6 +137,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    function fetchAndLoadWishlist() {
+        fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}`)
+            .then(response => response.json())
+            .then(user => {
+                loadWishlist(user.wishlist);
+            });
+    }
+
     document.getElementById('search-bar').addEventListener('input', function() {
         const query = this.value.toLowerCase();
         const hobbies = document.querySelectorAll('#hobby-list li');
@@ -166,6 +174,7 @@ document.addEventListener('DOMContentLoaded', function() {
         loadHobbies();
         loadTrendingHobbies();
         loadHiddenGems();
+        fetchAndLoadWishlist();
     });
 
     viewSupplierButton.addEventListener('click', function() {
@@ -220,4 +229,5 @@ document.addEventListener('DOMContentLoaded', function() {
     loadHobbies();
     loadTrendingHobbies();
     loadHiddenGems();
+    fetchAndLoadWishlist();
 });
