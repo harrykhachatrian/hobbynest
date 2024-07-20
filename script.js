@@ -6,20 +6,56 @@ document.addEventListener('DOMContentLoaded', function() {
     const addHobbyButton = document.getElementById('add-hobby-button');
     const addHobbyForm = document.getElementById('add-hobby-form');
     const newHobbyForm = document.getElementById('new-hobby-form');
-    
-    // Fetch hobbies for user view
-    fetch('https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies')
-        .then(response => response.json())
-        .then(data => {
-            const hobbyList = document.getElementById('hobby-list');
-            data.forEach(hobby => {
-                const li = document.createElement('li');
-                li.textContent = hobby.name;
-                li.dataset.id = hobby.id;
-                hobbyList.appendChild(li);
-            });
-        });
 
+    let userId = 1; // Assuming a single user for simplicity. In a real app, manage user sessions.
+
+    // Fetch and display hobbies for user view
+    function loadHobbies() {
+        fetch('https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies')
+            .then(response => response.json())
+            .then(data => {
+                const hobbyList = document.getElementById('hobby-list');
+                hobbyList.innerHTML = '';
+                data.forEach(hobby => {
+                    const li = document.createElement('li');
+                    li.textContent = hobby.name;
+                    li.dataset.id = hobby.id;
+                    hobbyList.appendChild(li);
+                });
+            });
+    }
+
+    // Fetch and display trending hobbies
+    function loadTrendingHobbies() {
+        fetch('https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/trending-hobbies')
+            .then(response => response.json())
+            .then(data => {
+                const trendingHobbyList = document.getElementById('trending-hobby-list');
+                trendingHobbyList.innerHTML = '';
+                data.forEach(hobby => {
+                    const li = document.createElement('li');
+                    li.textContent = hobby.name;
+                    trendingHobbyList.appendChild(li);
+                });
+            });
+    }
+
+    // Fetch and display hidden gems
+    function loadHiddenGems() {
+        fetch('https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hidden-gems')
+            .then(response => response.json())
+            .then(data => {
+                const hiddenGemsList = document.getElementById('hidden-gems-list');
+                hiddenGemsList.innerHTML = '';
+                data.forEach(hobby => {
+                    const li = document.createElement('li');
+                    li.textContent = hobby.name;
+                    hiddenGemsList.appendChild(li);
+                });
+            });
+    }
+
+    // Fetch hobby details and track exploration
     function showHobbyDetails(hobbyId) {
         fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies/${hobbyId}`)
             .then(response => response.json())
@@ -32,6 +68,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 `;
                 document.getElementById('hobbies').style.display = 'none';
                 document.getElementById('hobby-details').style.display = 'block';
+                
+                // Track hobby exploration
+                fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}/explore`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ hobbyId })
+                });
             });
     }
 
@@ -59,6 +104,9 @@ document.addEventListener('DOMContentLoaded', function() {
     viewUserButton.addEventListener('click', function() {
         userView.style.display = 'block';
         supplierView.style.display = 'none';
+        loadHobbies();
+        loadTrendingHobbies();
+        loadHiddenGems();
     });
 
     viewSupplierButton.addEventListener('click', function() {
@@ -109,4 +157,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             });
     }
+
+    loadHobbies();
+    loadTrendingHobbies();
+    loadHiddenGems();
 });
