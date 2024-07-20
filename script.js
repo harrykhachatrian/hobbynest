@@ -269,7 +269,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 data.forEach(hobby => {
                     const li = document.createElement('li');
                     const a = document.createElement('a');
-                    a.href = `hobby-details.html?id=${hobby.id}`;
+                    a.href = `supplier-hobby-details.html?id=${hobby.id}`;
                     a.textContent = hobby.name;
                     li.appendChild(a);
                     supplierHobbyList.appendChild(li);
