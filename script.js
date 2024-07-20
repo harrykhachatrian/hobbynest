@@ -27,6 +27,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     const li = document.createElement('li');
                     li.textContent = hobby.name;
                     li.dataset.id = hobby.id;
+                    li.addEventListener('click', function() {
+                        showHobbyDetails(hobby.id);
+                    });
                     hobbyList.appendChild(li);
                 });
             });
@@ -43,6 +46,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     const li = document.createElement('li');
                     li.textContent = hobby.name;
                     li.dataset.id = hobby.id;
+                    li.addEventListener('click', function() {
+                        showHobbyDetails(hobby.id);
+                    });
                     trendingHobbyList.appendChild(li);
                 });
             });
@@ -59,6 +65,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     const li = document.createElement('li');
                     li.textContent = hobby.name;
                     li.dataset.id = hobby.id;
+                    li.addEventListener('click', function() {
+                        showHobbyDetails(hobby.id);
+                    });
                     hiddenGemsList.appendChild(li);
                 });
             });
@@ -301,6 +310,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     const li = document.createElement('li');
                     li.textContent = `${hobby.name} - ${hobby.description}`;
                     li.dataset.id = hobby.id;
+                    li.addEventListener('click', function() {
+                        showSupplierHobbyDetails(hobby.id);
+                    });
                     supplierHobbyList.appendChild(li);
                 });
             });
