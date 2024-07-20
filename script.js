@@ -145,6 +145,50 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
+    function loadSupplierWishlist() {
+        fetch('https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/wishlist')
+            .then(response => response.json())
+            .then(data => {
+                const supplierWishlist = document.getElementById('supplier-wishlist');
+                supplierWishlist.innerHTML = '';
+                data.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = `${item} is in the wishlist, are you able to and willing to offer this as a hobby?`;
+                    const acceptButton = document.createElement('button');
+                    acceptButton.textContent = 'Yes';
+                    acceptButton.onclick = function() {
+                        fetch('https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/wishlist/accept', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ hobbyName: item })
+                        }).then(response => response.json())
+                          .then(() => {
+                              loadSupplierWishlist();
+                              alert(`${item} is now offered`);
+                          });
+                    };
+                    const declineButton = document.createElement('button');
+                    declineButton.textContent = 'No';
+                    declineButton.onclick = function() {
+                        fetch('https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/wishlist/decline', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ hobbyName: item })
+                        }).then(() => {
+                            loadSupplierWishlist();
+                        });
+                    };
+                    li.appendChild(acceptButton);
+                    li.appendChild(declineButton);
+                    supplierWishlist.appendChild(li);
+                });
+            });
+    }
+
     document.getElementById('search-bar').addEventListener('input', function() {
         const query = this.value.toLowerCase();
         const hobbies = document.querySelectorAll('#hobby-list li');
@@ -181,6 +225,7 @@ document.addEventListener('DOMContentLoaded', function() {
         userView.style.display = 'none';
         supplierView.style.display = 'block';
         loadSupplierHobbies();
+        loadSupplierWishlist();
     });
 
     addHobbyButton.addEventListener('click', function() {
