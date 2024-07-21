@@ -163,3 +163,28 @@ header {
 #autocomplete-list li:hover {
     background-color: #f0f0f0;
 }
+
+.class-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.class-table th, .class-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.class-table th {
+    background-color: #f2f2f2;
+    font-weight: 500;
+}
+
+.class-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.class-table tr:hover {
+    background-color: #f1f1f1;
+}

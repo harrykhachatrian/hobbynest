@@ -5,22 +5,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const hobbyLocation = document.getElementById('hobby-location');
     const hobbyContact = document.getElementById('hobby-contact');
     const hobbyDuration = document.getElementById('hobby-duration');
-    const classDates = document.getElementById('class-dates');
+    const classDatesTable = document.getElementById('class-dates').getElementsByTagName('tbody')[0];
     const editHobbyButton = document.getElementById('edit-hobby-button');
     const editHobbyForm = document.getElementById('edit-hobby-form');
     const saveHobbyButton = document.getElementById('save-hobby-button');
 
     function formatDateTime(dateStr, timeStr) {
-        const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-        const monthsOfYear = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        
-        const date = new Date(`${dateStr}T${timeStr}`);
-        const day = daysOfWeek[date.getDay()];
-        const month = monthsOfYear[date.getMonth()];
-        const dayOfMonth = date.getDate();
-        const time = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
-        
-        return `${day}, ${month} ${dayOfMonth} at ${time}`;
+        const date = new Date(dateStr + 'T' + timeStr);
+        const options = { weekday: 'long', month: 'long', day: 'numeric' };
+        const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
+        return {
+            date: date.toLocaleDateString('en-US', options),
+            time: date.toLocaleTimeString('en-US', timeOptions)
+        };
     }
 
     function loadHobbyDetails() {
@@ -32,16 +29,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 hobbyLocation.textContent = hobby.location;
                 hobbyContact.textContent = hobby.contact;
                 hobbyDuration.textContent = hobby.duration;
-                classDates.innerHTML = '';
 
+                classDatesTable.innerHTML = '';
                 hobby.dates.forEach(dateInfo => {
                     dateInfo.times.forEach(time => {
-                        const li = document.createElement('li');
-                        li.textContent = formatDateTime(dateInfo.date, time);
-                        classDates.appendChild(li);
+                        const tr = document.createElement('tr');
+                        const { date, time: formattedTime } = formatDateTime(dateInfo.date, time);
+                        const dateTd = document.createElement('td');
+                        const timeTd = document.createElement('td');
+                        dateTd.textContent = date;
+                        timeTd.textContent = formattedTime;
+                        tr.appendChild(dateTd);
+                        tr.appendChild(timeTd);
+                        classDatesTable.appendChild(tr);
                     });
                 });
 
+                // Populate edit form fields
                 document.getElementById('edit-description').value = hobby.description;
                 document.getElementById('edit-location').value = hobby.location;
                 document.getElementById('edit-contact').value = hobby.contact;

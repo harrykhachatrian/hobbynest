@@ -8,7 +8,7 @@
 </head>
 <body>
     <header>
-        <h1>Hobby Details (Supplier View)</h1>
+        <h1>Supplier Hobby Details</h1>
         <nav>
             <a href="index.html">Home</a>
         </nav>
@@ -20,19 +20,29 @@
         <p>Contact: <span id="hobby-contact"></span></p>
         <p>Class Duration: <span id="hobby-duration"></span></p> <!-- New field for duration -->
         <h3>Upcoming Classes</h3>
-        <ul id="class-dates"></ul>
-
+        <table id="class-dates" class="class-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Class dates will be inserted here -->
+            </tbody>
+        </table>
         <button id="edit-hobby-button">Edit Hobby</button>
         <form id="edit-hobby-form" style="display: none;">
+            <h3>Edit Hobby</h3>
             <label for="edit-description">Description:</label>
             <input type="text" id="edit-description">
             <label for="edit-location">Location:</label>
             <input type="text" id="edit-location">
             <label for="edit-contact">Contact:</label>
             <input type="text" id="edit-contact">
-            <label for="edit-duration">Duration:</label>
-            <input type="text" id="edit-duration"> <!-- Input for duration -->
-            <label for="edit-dates">Dates:</label>
+            <label for="edit-duration">Class Duration:</label>
+            <input type="text" id="edit-duration">
+            <label for="edit-dates">Dates and Times:</label>
             <textarea id="edit-dates"></textarea>
             <button type="button" id="save-hobby-button">Save Changes</button>
         </form>
