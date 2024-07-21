@@ -5,8 +5,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const hobbyLocation = document.getElementById('hobby-location');
     const hobbyContact = document.getElementById('hobby-contact');
     const hobbyDuration = document.getElementById('hobby-duration');
-    const hobbyCreditCost = document.getElementById('hobby-credit-cost'); // New field for credit cost
+    const hobbyCreditCost = document.getElementById('hobby-credit-cost');
     const classDatesList = document.getElementById('class-dates');
+    const userCreditsElement = document.getElementById('user-credits'); // Element to display user credits
+
+    const userId = 1; // Assuming a single user for simplicity. In a real app, manage user sessions.
 
     function formatDateTime(dateStr, timeStr) {
         const date = new Date(dateStr + 'T' + timeStr);
@@ -31,9 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         dateInfo.times.forEach(time => {
             const timeLi = document.createElement('li');
-            const { time: formattedTime } = formatDateTime(dateInfo.date, time);
-            timeLi.textContent = formattedTime;
-            timeLi.style.paddingLeft = '20px'; // Indent the times
+            timeLi.textContent = `at ${time}`;
             ul.appendChild(timeLi);
         });
 
@@ -65,5 +66,14 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
+    function loadUserCredits() {
+        fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}`)
+            .then(response => response.json())
+            .then(user => {
+                userCreditsElement.textContent = user.credits; // Display user credits
+            });
+    }
+
     loadHobbyDetails();
+    loadUserCredits();
 });
