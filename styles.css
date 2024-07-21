@@ -66,10 +66,11 @@ button {
     background-color: #4CAF50;
     color: white;
     border: none;
-    padding: 8px 16px;
+    padding: 5px 10px; /* Make buttons smaller */
     border-radius: 5px;
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.3s ease;
+    font-size: 0.9em; /* Make buttons smaller */
 }
 
 button:hover {
@@ -124,6 +125,8 @@ ul#wishlist li:hover, ul#hobby-list li:hover, ul#trending-hobby-list li:hover, u
 ul#wishlist li button, ul#upcoming-classes-list li button {
     margin-left: 10px; /* Ensure there is a gap between text and button */
     margin-right: 5px; /* Ensure there is a gap between buttons */
+    margin-top: 5px; /* Add space above and below buttons */
+    margin-bottom: 5px; /* Add space above and below buttons */
 }
 
 a {
