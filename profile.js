@@ -1,41 +1,84 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const userId = 1; // Assuming a single user for simplicity. In a real app, manage user sessions.
-    
-    function loadProfile() {
+    const userId = 1; // Assuming a single user for simplicity
+    const userProfileForm = document.getElementById('user-profile-form');
+    const interestsList = document.getElementById('interests-list');
+    const newInterestInput = document.getElementById('new-interest');
+    const addInterestButton = document.getElementById('add-interest-button');
+    const upcomingClassesList = document.getElementById('upcoming-classes-list');
+
+    function loadUserProfile() {
         fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}`)
             .then(response => response.json())
             .then(user => {
-                document.getElementById('user-name').value = user.name;
-                document.getElementById('user-email').value = user.email;
-                document.getElementById('credits-count').textContent = user.credits;
-                loadUpcomingClasses(user.upcomingClasses);
+                document.getElementById('name').value = user.name;
+                document.getElementById('email').value = user.email;
+                document.getElementById('credits').value = user.credits;
+                loadInterests(user.interests);
+                loadUpcomingClasses(user.exploredHobbies);
             });
     }
 
-    function loadUpcomingClasses(classes) {
-        const classesList = document.getElementById('upcoming-classes-list');
-        classesList.innerHTML = '';
-        classes.forEach(classItem => {
+    function loadInterests(interests) {
+        interestsList.innerHTML = '';
+        interests.forEach(interest => {
             const li = document.createElement('li');
-            li.textContent = `${classItem.name} on ${classItem.date}`;
-            const cancelButton = document.createElement('button');
-            cancelButton.textContent = 'Cancel';
-            cancelButton.style.marginLeft = '10px'; // Add margin directly in JavaScript if needed
-            cancelButton.onclick = function() {
-                cancelClass(classItem.id);
+            li.textContent = interest;
+            const removeButton = document.createElement('button');
+            removeButton.textContent = 'Remove';
+            removeButton.onclick = function() {
+                fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}/interests`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ interest })
+                }).then(response => response.json())
+                  .then(user => {
+                      loadInterests(user.interests);
+                  });
             };
-            li.appendChild(cancelButton);
-            classesList.appendChild(li);
+            li.appendChild(removeButton);
+            interestsList.appendChild(li);
         });
     }
 
-    function updateProfile(event) {
+    function loadUpcomingClasses(exploredHobbies) {
+        upcomingClassesList.innerHTML = '';
+        exploredHobbies.forEach(hobbyId => {
+            fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies/${hobbyId}`)
+                .then(response => response.json())
+                .then(hobby => {
+                    const li = document.createElement('li');
+                    li.textContent = `${hobby.name} - ${hobby.dates.map(dateInfo => `${dateInfo.date}: ${dateInfo.times.join(', ')}`).join(', ')}`;
+                    const cancelButton = document.createElement('button');
+                    cancelButton.textContent = 'Cancel';
+                    cancelButton.onclick = function() {
+                        // Remove from exploredHobbies
+                        fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({
+                                exploredHobbies: exploredHobbies.filter(id => id !== hobbyId)
+                            })
+                        }).then(response => response.json())
+                          .then(user => {
+                              loadUpcomingClasses(user.exploredHobbies);
+                          });
+                    };
+                    li.appendChild(cancelButton);
+                    upcomingClassesList.appendChild(li);
+                });
+        });
+    }
+
+    userProfileForm.addEventListener('submit', function(event) {
         event.preventDefault();
         const updatedUser = {
-            name: document.getElementById('user-name').value,
-            email: document.getElementById('user-email').value
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value
         };
-
         fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}`, {
             method: 'PUT',
             headers: {
@@ -43,44 +86,30 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             body: JSON.stringify(updatedUser)
         }).then(response => response.json())
-          .then(data => {
-              console.log('Profile updated:', data);
+          .then(user => {
               alert('Profile updated successfully');
+              loadUserProfile();
           });
-    }
+    });
 
-    function addCredits() {
-        const creditsToAdd = prompt('How many credits do you want to add?', '10');
-        if (creditsToAdd) {
-            fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}/credits`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ credits: parseInt(creditsToAdd) })
-            }).then(response => response.json())
-              .then(data => {
-                  console.log('Credits added:', data);
-                  document.getElementById('credits-count').textContent = data.credits;
-              });
+    addInterestButton.addEventListener('click', function() {
+        const newInterest = newInterestInput.value.trim();
+        if (newInterest === '') {
+            alert('Please enter an interest.');
+            return;
         }
-    }
+        fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}/interests`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ interest: newInterest })
+        }).then(response => response.json())
+          .then(user => {
+              newInterestInput.value = '';
+              loadInterests(user.interests);
+          });
+    });
 
-    function cancelClass(classId) {
-        fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/classes/${classId}`, {
-            method: 'DELETE'
-        }).then(response => {
-            if (response.ok) {
-                alert('Class canceled successfully');
-                loadProfile(); // Refresh the profile data
-            } else {
-                alert('Failed to cancel class');
-            }
-        });
-    }
-
-    document.getElementById('profile-form').addEventListener('submit', updateProfile);
-    document.getElementById('add-credits-button').addEventListener('click', addCredits);
-
-    loadProfile(); // Initial load
+    loadUserProfile();
 });
