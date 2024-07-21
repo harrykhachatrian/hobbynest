@@ -17,7 +17,6 @@ header {
     text-align: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 15px;
-    position: relative;
 }
 
 nav a {
@@ -32,15 +31,19 @@ nav a:hover {
     color: #ddd;
 }
 
+#hobby-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 #user-credits-container {
-    position: absolute;
-    top: 10px;
-    right: 10px;
     background-color: #fff;
     color: #333;
     padding: 10px;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-left: 20px;
 }
 
 main {
@@ -186,7 +189,6 @@ header {
     padding: 10px;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    margin-bottom: 8px; /* Add space between expandable days */
 }
 
 .dropdown-button:hover {
@@ -200,7 +202,6 @@ header {
     margin: 0;
     border-top: 1px solid #ddd;
     border-bottom: 1px solid #ddd;
-    padding-left: 20px; /* Indent the timeslots to the right */
 }
 
 .dropdown-content li {

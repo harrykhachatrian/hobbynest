@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
         dateInfo.times.forEach(time => {
             const timeLi = document.createElement('li');
             timeLi.textContent = `at ${time}`;
+            timeLi.style.paddingLeft = '20px'; // Indent the time slots
             ul.appendChild(timeLi);
         });
 
@@ -55,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 hobbyLocation.textContent = hobby.location;
                 hobbyContact.textContent = hobby.contact;
                 hobbyDuration.textContent = hobby.duration;
-                hobbyCreditCost.textContent = hobby.creditCost; // Display credit cost
+                hobbyCreditCost.textContent = hobby.creditCost;
 
                 classDatesList.innerHTML = '';
                 hobby.dates.forEach(dateInfo => {
