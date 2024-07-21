@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const hobbyLocation = document.getElementById('hobby-location');
     const hobbyContact = document.getElementById('hobby-contact');
     const hobbyDuration = document.getElementById('hobby-duration');
+    const hobbyCreditCost = document.getElementById('hobby-credit-cost'); // New field for credit cost
     const classDatesTable = document.getElementById('class-dates').getElementsByTagName('tbody')[0];
     const editHobbyButton = document.getElementById('edit-hobby-button');
     const editHobbyForm = document.getElementById('edit-hobby-form');
@@ -29,6 +30,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 hobbyLocation.textContent = hobby.location;
                 hobbyContact.textContent = hobby.contact;
                 hobbyDuration.textContent = hobby.duration;
+                hobbyCreditCost.textContent = hobby.creditCost; // Display credit cost
 
                 classDatesTable.innerHTML = '';
                 hobby.dates.forEach(dateInfo => {
@@ -50,6 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('edit-location').value = hobby.location;
                 document.getElementById('edit-contact').value = hobby.contact;
                 document.getElementById('edit-duration').value = hobby.duration;
+                document.getElementById('edit-credit-cost').value = hobby.creditCost; // Edit credit cost
                 document.getElementById('edit-dates').value = hobby.dates.map(dateInfo => `${dateInfo.date}: ${dateInfo.times.join(', ')}`).join('\n');
             });
     }
@@ -64,6 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
             location: document.getElementById('edit-location').value,
             contact: document.getElementById('edit-contact').value,
             duration: document.getElementById('edit-duration').value,
+            creditCost: document.getElementById('edit-credit-cost').value, // Save updated credit cost
             dates: document.getElementById('edit-dates').value.split('\n').map(line => {
                 const [date, times] = line.split(': ');
                 return {

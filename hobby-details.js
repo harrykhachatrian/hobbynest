@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const hobbyLocation = document.getElementById('hobby-location');
     const hobbyContact = document.getElementById('hobby-contact');
     const hobbyDuration = document.getElementById('hobby-duration');
+    const hobbyCreditCost = document.getElementById('hobby-credit-cost'); // New field for credit cost
     const classDatesList = document.getElementById('class-dates');
 
     function formatDateTime(dateStr, timeStr) {
@@ -30,7 +31,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         dateInfo.times.forEach(time => {
             const timeLi = document.createElement('li');
-            timeLi.textContent = `at ${time}`;
+            const { time: formattedTime } = formatDateTime(dateInfo.date, time);
+            timeLi.textContent = formattedTime;
+            timeLi.style.paddingLeft = '20px'; // Indent the times
             ul.appendChild(timeLi);
         });
 
@@ -51,6 +54,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 hobbyLocation.textContent = hobby.location;
                 hobbyContact.textContent = hobby.contact;
                 hobbyDuration.textContent = hobby.duration;
+                hobbyCreditCost.textContent = hobby.creditCost; // Display credit cost
 
                 classDatesList.innerHTML = '';
                 hobby.dates.forEach(dateInfo => {
