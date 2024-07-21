@@ -125,23 +125,38 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     addCreditsButton.addEventListener('click', function() {
-        const creditsToAdd = prompt("Enter the number of credits to add:");
-        if (creditsToAdd !== null && !isNaN(creditsToAdd) && parseInt(creditsToAdd) > 0) {
+        const options = `
+            <div>
+                <h3>Add Credits</h3>
+                <button onclick="addCredits(6, 50)">Add 6 Credits for $50</button>
+                <button onclick="addCredits(12, 100)">Add 12 Credits for $100</button>
+                <button onclick="addCredits(18, 150)">Add 18 Credits for $150</button>
+            </div>
+        `;
+        const creditsPopup = document.createElement('div');
+        creditsPopup.innerHTML = options;
+        creditsPopup.id = 'credits-popup';
+        document.body.appendChild(creditsPopup);
+    });
+
+    window.addCredits = function(credits, cost) {
+        if (confirm(`Are you sure you want to add ${credits} credits for $${cost}?`)) {
             fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}/credits`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ credits: parseInt(creditsToAdd) })
+                body: JSON.stringify({ credits })
             }).then(response => response.json())
               .then(user => {
                   document.getElementById('user-credits').textContent = user.credits;
                   document.getElementById('credits').value = user.credits;
+                  document.getElementById('credits-popup').remove();
               });
         } else {
-            alert("Please enter a valid number of credits.");
+            document.getElementById('credits-popup').remove();
         }
-    });
+    };
 
     loadUserProfile();
 });
