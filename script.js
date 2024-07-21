@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Please enter a search term.');
             return;
         }
-
+    
         fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies/search`, {
             method: 'POST',
             headers: {
@@ -36,11 +36,16 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             body: JSON.stringify({ name: query })
         })
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Hobby not found');
+            }
+            return response.json();
+        })
         .then(data => {
-            const hobbyList = document.getElementById('hobby-list');
-            hobbyList.innerHTML = '';
-            if (!data || data.length === 0) {
+            if (data) {
+                window.location.href = `hobby-details.html?id=${data.id}`;
+            } else {
                 if (confirm(`Sorry, ${query} is not yet offered, do you want to add it to your wishlist?`)) {
                     fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}/wishlist`, {
                         method: 'POST',
@@ -53,20 +58,13 @@ document.addEventListener('DOMContentLoaded', function() {
                           loadWishlist(user.wishlist);
                       });
                 }
-                return;
             }
-            hobbyList.style.display = 'block';
-            data.forEach(hobby => {
-                const li = document.createElement('li');
-                const a = document.createElement('a');
-                a.href = `hobby-details.html?id=${hobby.id}`;
-                a.textContent = hobby.name;
-                li.appendChild(a);
-                hobbyList.appendChild(li);
-            });
+        })
+        .catch(error => {
+            alert(error.message);
         });
     }
-
+    
     // Fetch and display tailored suggestions
     function loadTailoredSuggestions() {
         fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}/tailored-suggestions`)
