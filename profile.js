@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 document.getElementById('name').value = user.name;
                 document.getElementById('email').value = user.email;
                 loadInterests(user.interests);
-                loadUpcomingClasses(user.exploredHobbies);
+                loadUpcomingClasses(user.registeredClasses);
             });
     }
 
@@ -51,29 +51,27 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    function loadUpcomingClasses(exploredHobbies) {
+    function loadUpcomingClasses(registeredClasses) {
         upcomingClassesList.innerHTML = '';
-        exploredHobbies.forEach(hobbyId => {
-            fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies/${hobbyId}`)
+        registeredClasses.forEach(rc => {
+            fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies/${rc.hobbyId}`)
                 .then(response => response.json())
                 .then(hobby => {
                     const li = document.createElement('li');
-                    li.textContent = `${hobby.name} - ${hobby.dates.map(dateInfo => `${dateInfo.date}: ${dateInfo.times.join(', ')}`).join(', ')}`;
+                    li.textContent = `${hobby.name} - ${rc.date} at ${rc.time}`;
                     const cancelButton = document.createElement('button');
                     cancelButton.textContent = 'Cancel';
                     cancelButton.onclick = function() {
-                        // Remove from exploredHobbies
-                        fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}`, {
-                            method: 'PUT',
+                        fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}/cancel`, {
+                            method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
                             },
-                            body: JSON.stringify({
-                                exploredHobbies: exploredHobbies.filter(id => id !== hobbyId)
-                            })
+                            body: JSON.stringify({ hobbyId: rc.hobbyId, date: rc.date, time: rc.time, creditCost: hobby.creditCost })
                         }).then(response => response.json())
                           .then(user => {
-                              loadUpcomingClasses(user.exploredHobbies);
+                              alert('Class cancelled successfully');
+                              loadUserProfile();
                           });
                     };
                     li.appendChild(cancelButton);
