@@ -56,6 +56,24 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // Fetch and display tailored suggestions
+    function loadTailoredSuggestions() {
+        fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}/tailored-suggestions`)
+            .then(response => response.json())
+            .then(data => {
+                const tailoredSuggestionsList = document.getElementById('tailored-suggestions-list');
+                tailoredSuggestionsList.innerHTML = '';
+                data.forEach(hobby => {
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    a.href = `hobby-details.html?id=${hobby.id}`;
+                    a.textContent = hobby.name;
+                    li.appendChild(a);
+                    tailoredSuggestionsList.appendChild(li);
+                });
+            });
+    }
+
     // Fetch and display trending hobbies
     function loadTrendingHobbies() {
         fetch('https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/trending-hobbies')
@@ -245,6 +263,7 @@ document.addEventListener('DOMContentLoaded', function() {
         loadHobbies();
         loadTrendingHobbies();
         loadHiddenGems();
+        loadTailoredSuggestions();
         fetchAndLoadWishlist();
     });
 
@@ -359,5 +378,6 @@ document.addEventListener('DOMContentLoaded', function() {
     loadHobbies();
     loadTrendingHobbies();
     loadHiddenGems();
+    loadTailoredSuggestions();
     fetchAndLoadWishlist();
 });
