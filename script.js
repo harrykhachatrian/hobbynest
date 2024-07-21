@@ -108,6 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
             li.textContent = item;
             const removeButton = document.createElement('button');
             removeButton.textContent = 'Remove';
+            removeButton.style.marginLeft = '10px';
             removeButton.onclick = function() {
                 fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}/wishlist`, {
                     method: 'DELETE',
