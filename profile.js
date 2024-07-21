@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => response.json())
                 .then(hobby => {
                     const li = document.createElement('li');
-                    li.textContent = `${hobby.name} - ${rc.date} at ${rc.time}`;
+                    li.textContent = `${hobby.name} - Date: ${rc.date}, Time: ${rc.time}`;
                     const cancelButton = document.createElement('button');
                     cancelButton.textContent = 'Cancel';
                     cancelButton.onclick = function() {
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             body: JSON.stringify({ hobbyId: rc.hobbyId, date: rc.date, time: rc.time, creditCost: hobby.creditCost })
                         }).then(response => response.json())
                           .then(user => {
-                              alert('Class cancelled successfully');
+                              alert('Class cancelled successfully!');
                               loadUserProfile();
                           });
                     };
