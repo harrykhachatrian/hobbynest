@@ -39,9 +39,19 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             const hobbyList = document.getElementById('hobby-list');
             hobbyList.innerHTML = '';
-            if (data.length === 0) {
-                hobbyList.style.display = 'none';
-                alert(`No hobbies found for "${query}".`);
+            if (!data || data.length === 0) {
+                if (confirm(`Sorry, ${query} is not yet offered, do you want to add it to your wishlist?`)) {
+                    fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}/wishlist`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ hobbyName: query })
+                    }).then(response => response.json())
+                      .then(user => {
+                          loadWishlist(user.wishlist);
+                      });
+                }
                 return;
             }
             hobbyList.style.display = 'block';
