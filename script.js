@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const addHobbyForm = document.getElementById('add-hobby-form');
     const newHobbyForm = document.getElementById('new-hobby-form');
     const searchButton = document.getElementById('search-button');
-    const searchBar = document.getElementById('search-bar'); // New line to get search bar element
+    const searchBar = document.getElementById('search-bar');
     const notificationElement = document.getElementById('notification');
 
     let userId = 1; // Assuming a single user for simplicity. In a real app, manage user sessions.
@@ -283,6 +283,7 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(suggestions => {
                 // Display autocomplete suggestions
+                const autocompleteList = document.getElementById('autocomplete-list');
                 autocompleteList.innerHTML = '';
                 suggestions.forEach(suggestion => {
                     const li = document.createElement('li');
@@ -298,7 +299,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    searchButton.addEventListener('click', handleSearch); // Here handleSearch is called when search button is clicked
+    searchButton.addEventListener('click', searchHobbies);
 
     document.getElementById('hobby-list').addEventListener('click', function(event) {
         if (event.target.tagName === 'A') {
@@ -452,4 +453,5 @@ document.addEventListener('DOMContentLoaded', function() {
     loadHiddenGems();
     loadTailoredSuggestions();
     fetchAndLoadWishlist();
+    viewSupplierButton.click(); // To load the supplier view initially
 });
