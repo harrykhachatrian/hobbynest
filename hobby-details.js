@@ -81,7 +81,13 @@ document.addEventListener('DOMContentLoaded', function() {
                         .then(response => response.json())
                         .then(user => {
                             if (user.error) {
-                                alert(user.error);
+                                if (user.error === 'Insufficient credits.') {
+                                    if (confirm('You do not have enough credits to register for this class. Would you like to purchase additional credits?')) {
+                                        window.location.href = 'profile.html';
+                                    }
+                                } else {
+                                    alert(user.error);
+                                }
                             } else {
                                 alert('Class registered successfully!');
                                 loadUserCredits();
