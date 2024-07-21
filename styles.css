@@ -188,3 +188,23 @@ header {
 .class-table tr:hover {
     background-color: #f1f1f1;
 }
+
+/* Style for class dates list */
+ul#class-dates {
+    padding: 0;
+    list-style: none;
+}
+
+ul#class-dates li {
+    margin-bottom: 8px; /* Add some space between list items */
+    padding: 8px;
+    background: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+ul#class-dates li:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
