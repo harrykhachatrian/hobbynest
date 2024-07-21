@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const addHobbyForm = document.getElementById('add-hobby-form');
     const newHobbyForm = document.getElementById('new-hobby-form');
     const searchButton = document.getElementById('search-button');
+    const searchBar = document.getElementById('search-bar'); // New line to get search bar element
     const notificationElement = document.getElementById('notification');
 
     let userId = 1; // Assuming a single user for simplicity. In a real app, manage user sessions.
@@ -22,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function searchHobbies() {
-        const query = document.getElementById('search-bar').value.trim().toLowerCase();
+        const query = searchBar.value.trim().toLowerCase();
         if (query === '') {
             alert('Please enter a search term.');
             return;
@@ -124,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function handleSearch() {
-        const query = formatHobbyName(document.getElementById('search-bar').value);
+        const query = formatHobbyName(searchBar.value);
         fetch('https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies/search', {
             method: 'POST',
             headers: {
@@ -259,6 +260,43 @@ document.addEventListener('DOMContentLoaded', function() {
             const name = hobby.textContent.toLowerCase();
             hobby.parentElement.style.display = name.includes(query) ? '' : 'none';
         });
+    });
+
+    // Autocomplete functionality
+    searchBar.addEventListener('input', function() {
+        const query = this.value.toLowerCase();
+        const hobbies = document.querySelectorAll('#hobby-list li a');
+        hobbies.forEach(hobby => {
+            const name = hobby.textContent.toLowerCase();
+            hobby.parentElement.style.display = name.includes(query) ? '' : 'none';
+        });
+
+        // Fetch autocomplete suggestions
+        if (query.length > 2) { // Fetch suggestions if query is longer than 2 characters
+            fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies/autocomplete`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ query })
+            })
+            .then(response => response.json())
+            .then(suggestions => {
+                // Display autocomplete suggestions
+                const autocompleteList = document.getElementById('autocomplete-list');
+                autocompleteList.innerHTML = '';
+                suggestions.forEach(suggestion => {
+                    const li = document.createElement('li');
+                    li.textContent = suggestion;
+                    li.onclick = () => {
+                        searchBar.value = suggestion;
+                        autocompleteList.innerHTML = '';
+                        searchHobbies(); // Perform search when a suggestion is clicked
+                    };
+                    autocompleteList.appendChild(li);
+                });
+            });
+        }
     });
 
     searchButton.addEventListener('click', searchHobbies);
