@@ -17,6 +17,19 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
+    function formatDateTime(dateStr, timeStr) {
+        const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        const monthsOfYear = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        
+        const date = new Date(`${dateStr}T${timeStr}`);
+        const day = daysOfWeek[date.getDay()];
+        const month = monthsOfYear[date.getMonth()];
+        const dayOfMonth = date.getDate();
+        const time = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        return `${day}, ${month} ${dayOfMonth} at ${time}`;
+    }
+
     function loadHobbyDetails() {
         fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies/${hobbyId}`)
             .then(response => response.json())
@@ -26,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 hobbyLocation.textContent = hobby.location;
                 hobbyContact.textContent = hobby.contact;
                 hobbyDuration.textContent = hobby.duration;
+<<<<<<< HEAD
 
                 classDatesTable.innerHTML = '';
                 hobby.dates.forEach(dateInfo => {
@@ -39,6 +53,15 @@ document.addEventListener('DOMContentLoaded', function() {
                         tr.appendChild(dateTd);
                         tr.appendChild(timeTd);
                         classDatesTable.appendChild(tr);
+=======
+                classDates.innerHTML = '';
+
+                hobby.dates.forEach(dateInfo => {
+                    dateInfo.times.forEach(time => {
+                        const li = document.createElement('li');
+                        li.textContent = formatDateTime(dateInfo.date, time);
+                        classDates.appendChild(li);
+>>>>>>> a82a57c1dfe88cdd5caa9bef3ffb6cc084b8038d
                     });
                 });
             });
