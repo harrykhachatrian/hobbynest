@@ -15,13 +15,18 @@
     </header>
     <main>
         <h2>User Profile</h2>
-        <form id="user-profile-form">
+        <div id="user-details">
+            <p>Name: <span id="display-name"></span></p>
+            <p>Email: <span id="display-email"></span></p>
+            <p>Available Credits: <span id="display-credits"></span></p>
+            <button id="add-credits-button">Add Credits</button>
+            <button id="edit-profile-button">Edit</button>
+        </div>
+        <form id="edit-profile-form" style="display: none;">
             <label for="name">Name:</label>
             <input type="text" id="name" name="name">
             <label for="email">Email:</label>
             <input type="email" id="email" name="email">
-            <label for="credits">Credits:</label>
-            <input type="number" id="credits" name="credits" readonly>
             <button type="submit">Save Changes</button>
         </form>
 
