@@ -17,6 +17,31 @@ document.addEventListener('DOMContentLoaded', function() {
         };
     }
 
+    function createDropdown(dateInfo) {
+        const li = document.createElement('li');
+        const button = document.createElement('button');
+        button.textContent = dateInfo.dateFormatted;
+        button.classList.add('dropdown-button');
+        li.appendChild(button);
+
+        const ul = document.createElement('ul');
+        ul.classList.add('dropdown-content');
+        ul.style.display = 'none';
+
+        dateInfo.times.forEach(time => {
+            const timeLi = document.createElement('li');
+            timeLi.textContent = `at ${time}`;
+            ul.appendChild(timeLi);
+        });
+
+        li.appendChild(ul);
+        button.addEventListener('click', function() {
+            ul.style.display = ul.style.display === 'none' ? 'block' : 'none';
+        });
+
+        return li;
+    }
+
     function loadHobbyDetails() {
         fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies/${hobbyId}`)
             .then(response => response.json())
@@ -29,12 +54,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 classDatesList.innerHTML = '';
                 hobby.dates.forEach(dateInfo => {
-                    dateInfo.times.forEach(time => {
-                        const li = document.createElement('li');
-                        const { date, time: formattedTime } = formatDateTime(dateInfo.date, time);
-                        li.textContent = `${date} at ${formattedTime}`;
-                        classDatesList.appendChild(li);
-                    });
+                    const formattedDate = formatDateTime(dateInfo.date, '09:00').date;
+                    const dropdownItem = createDropdown({ ...dateInfo, dateFormatted: formattedDate });
+                    classDatesList.appendChild(dropdownItem);
                 });
             });
     }

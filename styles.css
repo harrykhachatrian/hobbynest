@@ -164,47 +164,41 @@ header {
     background-color: #f0f0f0;
 }
 
-.class-table {
+/* Styles for dropdown */
+.dropdown-button {
     width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-}
-
-.class-table th, .class-table td {
-    border: 1px solid #ddd;
-    padding: 8px;
     text-align: left;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-.class-table th {
-    background-color: #f2f2f2;
-    font-weight: 500;
+.dropdown-button:hover {
+    background-color: #45a049;
 }
 
-.class-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-.class-table tr:hover {
-    background-color: #f1f1f1;
-}
-
-/* Style for class dates list */
-ul#class-dates {
-    padding: 0;
+.dropdown-content {
+    display: none;
     list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
 }
 
-ul#class-dates li {
-    margin-bottom: 8px; /* Add some space between list items */
-    padding: 8px;
-    background: white;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+.dropdown-content li {
+    padding: 10px;
+    background-color: white;
+    border-bottom: 1px solid #ddd;
 }
 
-ul#class-dates li:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.dropdown-content li:hover {
+    background-color: #f0f0f0;
+}
+
+.dropdown-content li:last-child {
+    border-bottom: none;
 }
