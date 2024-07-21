@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const hobbyContact = document.getElementById('hobby-contact');
     const hobbyDuration = document.getElementById('hobby-duration');
     const hobbyCreditCost = document.getElementById('hobby-credit-cost');
-    const classDatesBody = document.getElementById('class-dates-body');
+    const classDatesList = document.getElementById('class-dates');
     const userCreditsElement = document.getElementById('user-credits');
     const userId = 1;
 
@@ -31,29 +31,37 @@ document.addEventListener('DOMContentLoaded', function() {
                 hobbyDuration.textContent = hobby.duration;
                 hobbyCreditCost.textContent = hobby.creditCost;
 
-                classDatesBody.innerHTML = '';
+                classDatesList.innerHTML = '';
                 hobby.dates.forEach(dateInfo => {
+                    const dateLi = document.createElement('li');
+                    const button = document.createElement('button');
+                    button.textContent = dateInfo.date;
+                    button.classList.add('dropdown-button');
+
+                    const ul = document.createElement('ul');
+                    ul.classList.add('dropdown-content');
+                    ul.style.display = 'none';
+
                     dateInfo.times.forEach(time => {
                         const { date, time: formattedTime } = formatDateTime(dateInfo.date, time);
-                        const tr = document.createElement('tr');
-                        const dateTd = document.createElement('td');
-                        const timeTd = document.createElement('td');
-                        const actionTd = document.createElement('td');
+                        const li = document.createElement('li');
+                        li.textContent = `${formattedTime} `;
                         const registerButton = document.createElement('button');
-
-                        dateTd.textContent = date;
-                        timeTd.textContent = formattedTime;
                         registerButton.textContent = 'Register';
                         registerButton.classList.add('register-button');
                         registerButton.dataset.date = dateInfo.date;
                         registerButton.dataset.time = time;
                         registerButton.dataset.cost = hobby.creditCost;
+                        li.appendChild(registerButton);
+                        ul.appendChild(li);
+                    });
 
-                        actionTd.appendChild(registerButton);
-                        tr.appendChild(dateTd);
-                        tr.appendChild(timeTd);
-                        tr.appendChild(actionTd);
-                        classDatesBody.appendChild(tr);
+                    dateLi.appendChild(button);
+                    dateLi.appendChild(ul);
+                    classDatesList.appendChild(dateLi);
+
+                    button.addEventListener('click', function() {
+                        ul.style.display = ul.style.display === 'none' ? 'block' : 'none';
                     });
                 });
 
@@ -73,13 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         .then(response => response.json())
                         .then(user => {
                             if (user.error) {
-                                if (user.error === 'Insufficient credits.') {
-                                    if (confirm('You do not have enough credits to register for this class. Would you like to purchase additional credits?')) {
-                                        window.location.href = 'profile.html';
-                                    }
-                                } else {
-                                    alert(user.error);
-                                }
+                                alert(user.error);
                             } else {
                                 alert('Class registered successfully!');
                                 loadUserCredits();
@@ -107,38 +109,32 @@ document.addEventListener('DOMContentLoaded', function() {
                 const registeredClassesList = document.getElementById('registered-classes-list');
                 registeredClassesList.innerHTML = '';
                 user.registeredClasses.forEach(rc => {
-                    const li = document.createElement('li');
-                    li.textContent = `Hobby ID: ${rc.hobbyId}, Date: ${rc.date}, Time: ${rc.time}`;
-                    const cancelButton = document.createElement('button');
-                    cancelButton.textContent = 'Cancel';
-                    cancelButton.addEventListener('click', function() {
-                        getHobbyCreditCost(rc.hobbyId).then(creditCost => {
-                            fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}/cancel`, {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify({ hobbyId: rc.hobbyId, date: rc.date, time: rc.time, creditCost })
-                            })
-                            .then(response => response.json())
-                            .then(user => {
-                                alert('Class cancelled successfully!');
-                                loadUserCredits();
-                                loadRegisteredClasses();
-                            })
-                            .catch(error => console.error('Error:', error));
+                    fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies/${rc.hobbyId}`)
+                        .then(response => response.json())
+                        .then(hobby => {
+                            const li = document.createElement('li');
+                            li.textContent = `${hobby.name} - ${rc.date} at ${rc.time}`;
+                            const cancelButton = document.createElement('button');
+                            cancelButton.textContent = 'Cancel';
+                            cancelButton.addEventListener('click', function() {
+                                fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}/cancel`, {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify({ hobbyId: rc.hobbyId, date: rc.date, time: rc.time, creditCost: hobby.creditCost })
+                                }).then(response => response.json())
+                                .then(user => {
+                                    alert('Class cancelled successfully');
+                                    loadUserCredits();
+                                    loadRegisteredClasses();
+                                });
+                            });
+                            li.appendChild(cancelButton);
+                            registeredClassesList.appendChild(li);
                         });
-                    });
-                    li.appendChild(cancelButton);
-                    registeredClassesList.appendChild(li);
                 });
             });
-    }
-
-    function getHobbyCreditCost(hobbyId) {
-        return fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies/${hobbyId}`)
-            .then(response => response.json())
-            .then(hobby => hobby.creditCost);
     }
 
     loadHobbyDetails();

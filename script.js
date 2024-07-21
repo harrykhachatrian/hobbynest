@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchButton = document.getElementById('search-button');
     const searchBar = document.getElementById('search-bar');
     const notificationElement = document.getElementById('notification');
-    const userCreditsElement = document.getElementById('user-credits');
+    const userCreditsElement = document.getElementById('user-credits'); // Add this line
 
     let userId = 1; // Assuming a single user for simplicity. In a real app, manage user sessions.
 
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
         fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}`)
             .then(response => response.json())
             .then(user => {
-                userCreditsElement.textContent = user.credits;
+                userCreditsElement.textContent = user.credits; // Display user credits
             });
     }
 
@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => {
             if (!response.ok) {
+                // If the response is not OK (e.g., 404 Not Found), throw an error
                 throw new Error('Hobby not found.');
             }
             return response.json();
@@ -56,6 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location.href = `hobby-details.html?id=${hobby.id}`;
         })
         .catch(error => {
+            // Handle the error case where the hobby was not found
             if (confirm(`Sorry, ${query} is not yet offered, do you want to add it to your wishlist?`)) {
                 fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}/wishlist`, {
                     method: 'POST',
@@ -193,6 +195,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 loadWishlist(user.wishlist);
                 if (user.notification) {
                     displayNotification(user.notification);
+                    // Clear the notification after displaying it
                     user.notification = null;
                     fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}`, {
                         method: 'POST',
@@ -275,6 +278,7 @@ document.addEventListener('DOMContentLoaded', function() {
             hobby.parentElement.style.display = name.includes(query) ? '' : 'none';
         });
 
+        // Fetch autocomplete suggestions
         if (query.length > 2) { // Fetch suggestions if query is longer than 2 characters
             fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies/autocomplete`, {
                 method: 'POST',
@@ -285,6 +289,7 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(response => response.json())
             .then(suggestions => {
+                // Display autocomplete suggestions
                 const autocompleteList = document.getElementById('autocomplete-list');
                 autocompleteList.innerHTML = '';
                 suggestions.forEach(suggestion => {
@@ -460,5 +465,5 @@ document.addEventListener('DOMContentLoaded', function() {
     loadHiddenGems();
     loadTailoredSuggestions();
     fetchAndLoadWishlist();
-    loadUserCredits();
+    loadUserCredits(); // Add this line
 });
