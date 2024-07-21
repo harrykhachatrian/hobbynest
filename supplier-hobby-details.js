@@ -10,6 +10,19 @@ document.addEventListener('DOMContentLoaded', function() {
     const editHobbyForm = document.getElementById('edit-hobby-form');
     const saveHobbyButton = document.getElementById('save-hobby-button');
 
+    function formatDateTime(dateStr, timeStr) {
+        const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        const monthsOfYear = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        
+        const date = new Date(`${dateStr}T${timeStr}`);
+        const day = daysOfWeek[date.getDay()];
+        const month = monthsOfYear[date.getMonth()];
+        const dayOfMonth = date.getDate();
+        const time = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+        
+        return `${day}, ${month} ${dayOfMonth} at ${time}`;
+    }
+
     function loadHobbyDetails() {
         fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies/${hobbyId}`)
             .then(response => response.json())
@@ -20,11 +33,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 hobbyContact.textContent = hobby.contact;
                 hobbyDuration.textContent = hobby.duration;
                 classDates.innerHTML = '';
+
                 hobby.dates.forEach(dateInfo => {
-                    const li = document.createElement('li');
-                    li.textContent = `${dateInfo.date}: ${dateInfo.times.join(', ')}`;
-                    classDates.appendChild(li);
+                    dateInfo.times.forEach(time => {
+                        const li = document.createElement('li');
+                        li.textContent = formatDateTime(dateInfo.date, time);
+                        classDates.appendChild(li);
+                    });
                 });
+
                 document.getElementById('edit-description').value = hobby.description;
                 document.getElementById('edit-location').value = hobby.location;
                 document.getElementById('edit-contact').value = hobby.contact;

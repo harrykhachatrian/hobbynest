@@ -18,20 +18,21 @@
         <p id="hobby-description"></p>
         <p>Location: <span id="hobby-location"></span></p>
         <p>Contact: <span id="hobby-contact"></span></p>
-        <p>Class Duration: <span id="hobby-duration"></span></p>
+        <p>Class Duration: <span id="hobby-duration"></span></p> <!-- New field for duration -->
         <h3>Upcoming Classes</h3>
         <ul id="class-dates"></ul>
+
         <button id="edit-hobby-button">Edit Hobby</button>
-        <form id="edit-hobby-form" style="display:none;">
+        <form id="edit-hobby-form" style="display: none;">
             <label for="edit-description">Description:</label>
             <input type="text" id="edit-description">
             <label for="edit-location">Location:</label>
             <input type="text" id="edit-location">
             <label for="edit-contact">Contact:</label>
             <input type="text" id="edit-contact">
-            <label for="edit-duration">Class Duration:</label>
-            <input type="text" id="edit-duration">
-            <label for="edit-dates">Dates and Times:</label>
+            <label for="edit-duration">Duration:</label>
+            <input type="text" id="edit-duration"> <!-- Input for duration -->
+            <label for="edit-dates">Dates:</label>
             <textarea id="edit-dates"></textarea>
             <button type="button" id="save-hobby-button">Save Changes</button>
         </form>
