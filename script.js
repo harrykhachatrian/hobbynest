@@ -9,11 +9,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchButton = document.getElementById('search-button');
     const searchBar = document.getElementById('search-bar');
     const notificationElement = document.getElementById('notification');
+    const userCreditsElement = document.getElementById('user-credits'); // Add this line
 
     let userId = 1; // Assuming a single user for simplicity. In a real app, manage user sessions.
 
     function formatHobbyName(name) {
         return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+    }
+
+    // Fetch and display user credits
+    function loadUserCredits() {
+        fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}`)
+            .then(response => response.json())
+            .then(user => {
+                userCreditsElement.textContent = user.credits; // Display user credits
+            });
     }
 
     // Fetch and display hobbies for user view
@@ -308,6 +318,7 @@ document.addEventListener('DOMContentLoaded', function() {
     viewUserButton.addEventListener('click', function() {
         userView.style.display = 'block';
         supplierView.style.display = 'none';
+        loadUserCredits(); // Add this line
         loadTrendingHobbies();
         loadHiddenGems();
         loadTailoredSuggestions();
@@ -454,4 +465,5 @@ document.addEventListener('DOMContentLoaded', function() {
     loadHiddenGems();
     loadTailoredSuggestions();
     fetchAndLoadWishlist();
+    loadUserCredits(); // Add this line
 });
