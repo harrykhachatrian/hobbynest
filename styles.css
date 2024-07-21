@@ -11,12 +11,23 @@ body {
 }
 
 header {
-    background-color: #4CAF50;
+    background-color: #8b5a2b;
     color: white;
     padding: 10px;
     text-align: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 15px;
+}
+
+header .logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+header .logo {
+    width: 50px; /* Adjust the size as needed */
+    margin-right: 10px;
 }
 
 nav a {
@@ -44,8 +55,8 @@ nav a:hover {
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-left: 20px;
-    text-align: right; /* Align text to the right */
-    display: inline-block; /* Ensure the container only takes up necessary width */
+    text-align: right;
+    display: inline-block;
 }
 
 main {
@@ -67,7 +78,7 @@ main {
 }
 
 .notification {
-    background-color: #4CAF50; /* Green */
+    background-color: #8b5a2b;
     color: white;
     padding: 10px;
     position: fixed;
@@ -79,8 +90,8 @@ main {
 }
 
 button {
-    margin-left: 8px; /* Add margin to the left of buttons */
-    background-color: #4CAF50;
+    margin-left: 8px;
+    background-color: #8b5a2b;
     color: white;
     border: none;
     padding: 8px 16px;
@@ -90,7 +101,7 @@ button {
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #a0522d;
     transform: translateY(-1px);
 }
 
@@ -100,13 +111,13 @@ button:active {
 
 label {
     display: inline-block;
-    width: 130px; /* Adjust the width to align with your design */
+    width: 130px;
     margin-bottom: 8px;
     font-weight: 500;
 }
 
 input[type="text"], textarea {
-    width: calc(100% - 150px); /* Adjust for label width and padding */
+    width: calc(100% - 150px);
     padding: 8px;
     margin-bottom: 8px;
     border: 1px solid #ddd;
@@ -115,7 +126,7 @@ input[type="text"], textarea {
 }
 
 input[type="text"]:focus, textarea:focus {
-    border-color: #4CAF50;
+    border-color: #8b5a2b;
     outline: none;
 }
 
@@ -125,7 +136,7 @@ ul {
 }
 
 ul#wishlist li, ul#hobby-list li, ul#trending-hobby-list li, ul#tailored-suggestions-list li, ul#hidden-gems-list li, ul#upcoming-classes-list li, ul#interests-list li {
-    margin-bottom: 8px; /* Add some space between list items for better readability */
+    margin-bottom: 8px;
     padding: 8px;
     background: white;
     border-radius: 5px;
@@ -139,24 +150,19 @@ ul#wishlist li:hover, ul#hobby-list li:hover, ul#trending-hobby-list li:hover, u
 }
 
 ul#wishlist li button, ul#upcoming-classes-list li button, ul#interests-list li button {
-    margin-left: 10px; /* Ensure there is a gap between text and button */
-    margin-right: 5px; /* Ensure there is a gap between buttons */
-    margin-top: 5px; /* Add some space between buttons for better readability */
+    margin-left: 10px;
+    margin-right: 5px;
+    margin-top: 5px;
 }
 
 a {
-    color: #4CAF50;
+    color: #8b5a2b;
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 a:hover {
-    color: #388E3C;
-}
-
-/* Add gradient background to header */
-header {
-    background: linear-gradient(90deg, #4CAF50, #45a049);
+    color: #a0522d;
 }
 
 #autocomplete-list {
@@ -166,7 +172,7 @@ header {
     background-color: white;
     position: absolute;
     z-index: 1000;
-    width: calc(100% - 20px); /* Adjust width according to your search bar */
+    width: calc(100% - 20px);
     margin-top: 5px;
     padding: 0;
     list-style: none;
@@ -181,11 +187,10 @@ header {
     background-color: #f0f0f0;
 }
 
-/* Styles for dropdown */
 .dropdown-button {
     width: 100%;
     text-align: left;
-    background-color: #4CAF50;
+    background-color: #8b5a2b;
     color: white;
     border: none;
     padding: 10px;
@@ -194,7 +199,7 @@ header {
 }
 
 .dropdown-button:hover {
-    background-color: #45a049;
+    background-color: #a0522d;
 }
 
 .dropdown-content {
