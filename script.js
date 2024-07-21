@@ -17,20 +17,43 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Fetch and display hobbies for user view
     function loadHobbies() {
-        fetch('https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies')
-            .then(response => response.json())
-            .then(data => {
-                const hobbyList = document.getElementById('hobby-list');
-                hobbyList.innerHTML = '';
-                data.forEach(hobby => {
-                    const li = document.createElement('li');
-                    const a = document.createElement('a');
-                    a.href = `hobby-details.html?id=${hobby.id}`;
-                    a.textContent = hobby.name;
-                    li.appendChild(a);
-                    hobbyList.appendChild(li);
-                });
+        const hobbyList = document.getElementById('hobby-list');
+        hobbyList.style.display = 'none'; // Hide hobby list initially
+    }
+
+    function searchHobbies() {
+        const query = document.getElementById('search-bar').value.trim().toLowerCase();
+        if (query === '') {
+            alert('Please enter a search term.');
+            return;
+        }
+
+        fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies/search`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name: query })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const hobbyList = document.getElementById('hobby-list');
+            hobbyList.innerHTML = '';
+            if (data.length === 0) {
+                hobbyList.style.display = 'none';
+                alert(`No hobbies found for "${query}".`);
+                return;
+            }
+            hobbyList.style.display = 'block';
+            data.forEach(hobby => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = `hobby-details.html?id=${hobby.id}`;
+                a.textContent = hobby.name;
+                li.appendChild(a);
+                hobbyList.appendChild(li);
             });
+        });
     }
 
     // Fetch and display trending hobbies
@@ -207,7 +230,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    searchButton.addEventListener('click', handleSearch);
+    searchButton.addEventListener('click', searchHobbies);
 
     document.getElementById('hobby-list').addEventListener('click', function(event) {
         if (event.target.tagName === 'A') {
