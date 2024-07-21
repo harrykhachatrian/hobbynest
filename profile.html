@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>User Profile</h1>
+        <nav>
+            <a href="index.html">Home</a>
+        </nav>
+    </header>
+    <main>
+        <section id="profile">
+            <h2>Profile Information</h2>
+            <form id="profile-form">
+                <label for="user-name">Name:</label>
+                <input type="text" id="user-name" name="name" required>
+                <label for="user-email">Email:</label>
+                <input type="email" id="user-email" name="email" required>
+                <button type="submit">Update Profile</button>
+            </form>
+            <h2>Credits</h2>
+            <p id="user-credits">Available Credits: <span id="credits-count"></span></p>
+            <button id="add-credits-button">Add Credits</button>
+            <h2>Upcoming Classes</h2>
+            <ul id="upcoming-classes-list"></ul>
+        </section>
+    </main>
+    <script src="profile.js"></script>
+</body>
+</html>
