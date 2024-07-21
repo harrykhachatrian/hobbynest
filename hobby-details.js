@@ -81,7 +81,15 @@ document.addEventListener('DOMContentLoaded', function() {
                         .then(response => response.json())
                         .then(user => {
                             if (user.error) {
-                                alert(user.error);
+                                if (user.error.includes('Insufficient credits')) {
+                                    const purchaseCredits = confirm(user.error + ' Would you like to purchase additional credits?');
+                                    if (purchaseCredits) {
+                                        // Redirect to profile page where they can purchase credits
+                                        window.location.href = 'profile.html';
+                                    }
+                                } else {
+                                    alert(user.error);
+                                }
                             } else {
                                 alert('Class registered successfully!');
                                 loadUserCredits();
