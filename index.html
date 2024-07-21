@@ -12,15 +12,15 @@
         <nav>
             <a href="#" id="view-user">View as User</a>
             <a href="#" id="view-supplier">View as Supplier</a>
-            <a href="profile.html" id="profile-link" class="profile-link">Profile</a>
         </nav>
     </header>
     <main>
         <section id="user-view">
             <h2>User View: Explore Hobbies</h2>
             <input type="text" id="search-bar" placeholder="Search hobbies...">
+            <ul id="autocomplete-list"></ul> <!-- Add this line for autocomplete -->
             <button id="search-button">Search</button>
-            <ul id="hobby-list" style="display: none;"></ul> <!-- Hide hobby list initially -->
+            <ul id="hobby-list"></ul>
             <h3>Trending Hobbies</h3>
             <ul id="trending-hobby-list"></ul>
             <h3>Tailored Suggestions</h3>

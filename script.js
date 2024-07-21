@@ -283,7 +283,6 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(suggestions => {
                 // Display autocomplete suggestions
-                const autocompleteList = document.getElementById('autocomplete-list');
                 autocompleteList.innerHTML = '';
                 suggestions.forEach(suggestion => {
                     const li = document.createElement('li');

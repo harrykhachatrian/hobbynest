@@ -141,3 +141,25 @@ a:hover {
 header {
     background: linear-gradient(90deg, #4CAF50, #45a049);
 }
+
+#autocomplete-list {
+    border: 1px solid #ddd;
+    max-height: 150px;
+    overflow-y: auto;
+    background-color: white;
+    position: absolute;
+    z-index: 1000;
+    width: calc(100% - 20px); /* Adjust width according to your search bar */
+    margin-top: 5px;
+    padding: 0;
+    list-style: none;
+}
+
+#autocomplete-list li {
+    padding: 8px;
+    cursor: pointer;
+}
+
+#autocomplete-list li:hover {
+    background-color: #f0f0f0;
+}
