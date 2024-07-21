@@ -299,7 +299,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    searchButton.addEventListener('click', searchHobbies);
+    searchButton.addEventListener('click', handleSearch); // Here handleSearch is called when search button is clicked
 
     document.getElementById('hobby-list').addEventListener('click', function(event) {
         if (event.target.tagName === 'A') {
