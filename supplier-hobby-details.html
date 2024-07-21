@@ -8,16 +8,33 @@
 </head>
 <body>
     <header>
-        <h1>HobbyNest - Supplier View</h1>
+        <h1>Hobby Details (Supplier View)</h1>
         <nav>
             <a href="index.html">Home</a>
         </nav>
     </header>
     <main>
-        <section id="supplier-hobby-details">
-            <h2>Edit Hobby Details</h2>
-            <div id="hobby-info"></div>
-        </section>
+        <h2 id="hobby-name"></h2>
+        <p id="hobby-description"></p>
+        <p>Location: <span id="hobby-location"></span></p>
+        <p>Contact: <span id="hobby-contact"></span></p>
+        <p>Class Duration: <span id="hobby-duration"></span></p>
+        <h3>Upcoming Classes</h3>
+        <ul id="class-dates"></ul>
+        <button id="edit-hobby-button">Edit Hobby</button>
+        <form id="edit-hobby-form" style="display:none;">
+            <label for="edit-description">Description:</label>
+            <input type="text" id="edit-description">
+            <label for="edit-location">Location:</label>
+            <input type="text" id="edit-location">
+            <label for="edit-contact">Contact:</label>
+            <input type="text" id="edit-contact">
+            <label for="edit-duration">Class Duration:</label>
+            <input type="text" id="edit-duration">
+            <label for="edit-dates">Dates and Times:</label>
+            <textarea id="edit-dates"></textarea>
+            <button type="button" id="save-hobby-button">Save Changes</button>
+        </form>
     </main>
     <script src="supplier-hobby-details.js"></script>
 </body>

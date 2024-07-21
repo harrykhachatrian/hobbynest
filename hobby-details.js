@@ -4,11 +4,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const hobbyDescription = document.getElementById('hobby-description');
     const hobbyLocation = document.getElementById('hobby-location');
     const hobbyContact = document.getElementById('hobby-contact');
-    const hobbyDuration = document.getElementById('hobby-duration'); // New field for duration
+    const hobbyDuration = document.getElementById('hobby-duration');
     const classDates = document.getElementById('class-dates');
-    const editHobbyButton = document.getElementById('edit-hobby-button');
-    const editHobbyForm = document.getElementById('edit-hobby-form');
-    const saveHobbyButton = document.getElementById('save-hobby-button');
 
     function loadHobbyDetails() {
         fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies/${hobbyId}`)
@@ -18,53 +15,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 hobbyDescription.textContent = hobby.description;
                 hobbyLocation.textContent = hobby.location;
                 hobbyContact.textContent = hobby.contact;
-                hobbyDuration.textContent = hobby.duration; // Display duration
+                hobbyDuration.textContent = hobby.duration;
                 classDates.innerHTML = '';
                 hobby.dates.forEach(dateInfo => {
                     const li = document.createElement('li');
                     li.textContent = `${dateInfo.date}: ${dateInfo.times.join(', ')}`;
                     classDates.appendChild(li);
                 });
-                document.getElementById('edit-description').value = hobby.description;
-                document.getElementById('edit-location').value = hobby.location;
-                document.getElementById('edit-contact').value = hobby.contact;
-                document.getElementById('edit-duration').value = hobby.duration; // Edit duration
-                document.getElementById('edit-dates').value = hobby.dates.map(dateInfo => `${dateInfo.date}: ${dateInfo.times.join(', ')}`).join('\n');
             });
     }
-
-    editHobbyButton.addEventListener('click', function() {
-        editHobbyForm.style.display = 'block';
-    });
-
-    saveHobbyButton.addEventListener('click', function() {
-        const updatedHobby = {
-            description: document.getElementById('edit-description').value,
-            location: document.getElementById('edit-location').value,
-            contact: document.getElementById('edit-contact').value,
-            duration: document.getElementById('edit-duration').value, // Save updated duration
-            dates: document.getElementById('edit-dates').value.split('\n').map(line => {
-                const [date, times] = line.split(': ');
-                return {
-                    date,
-                    times: times.split(', ')
-                };
-            })
-        };
-
-        fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies/${hobbyId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(updatedHobby)
-        }).then(response => response.json())
-          .then(() => {
-              alert('Hobby updated successfully');
-              editHobbyForm.style.display = 'none';
-              loadHobbyDetails();
-          });
-    });
 
     loadHobbyDetails();
 });
