@@ -453,5 +453,4 @@ document.addEventListener('DOMContentLoaded', function() {
     loadHiddenGems();
     loadTailoredSuggestions();
     fetchAndLoadWishlist();
-    viewSupplierButton.click(); // To load the supplier view initially
 });
