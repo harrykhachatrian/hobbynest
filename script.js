@@ -346,7 +346,8 @@ document.addEventListener('DOMContentLoaded', function() {
             name: formatHobbyName(formData.get('name')),
             description: formData.get('description'),
             location: formData.get('location'),
-            contact: formData.get('contact')
+            contact: formData.get('contact'),
+            duration: formData.get('duration')
         };
 
         fetch('https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies', {
@@ -395,6 +396,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         <input type="text" id="edit-location" value="${hobbyInfo.location}">
                         <label for="edit-contact">Contact:</label>
                         <input type="text" id="edit-contact" value="${hobbyInfo.contact}">
+                        <label for="edit-duration">Class Duration:</label>
+                        <input type="text" id="edit-duration" value="${hobbyInfo.duration}">
                         <label for="edit-dates">Dates and Times:</label>
                         <textarea id="edit-dates">${hobbyInfo.dates.map(dateInfo => `${dateInfo.date}: ${dateInfo.times.join(', ')}`).join('\n')}</textarea>
                         <button type="submit">Update</button>
@@ -411,6 +414,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         description: document.getElementById('edit-description').value,
                         location: document.getElementById('edit-location').value,
                         contact: document.getElementById('edit-contact').value,
+                        duration: document.getElementById('edit-duration').value,
                         dates: document.getElementById('edit-dates').value.split('\n').map(line => {
                             const [date, times] = line.split(': ');
                             return {
