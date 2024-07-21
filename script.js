@@ -38,32 +38,45 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Hobby not found');
+                // If the response is not OK (e.g., 404 Not Found), throw an error
+                throw new Error('Hobby not found.');
             }
             return response.json();
         })
         .then(data => {
-            if (data) {
-                window.location.href = `hobby-details.html?id=${data.id}`;
-            } else {
-                if (confirm(`Sorry, ${query} is not yet offered, do you want to add it to your wishlist?`)) {
-                    fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}/wishlist`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ hobbyName: query })
-                    }).then(response => response.json())
-                      .then(user => {
-                          loadWishlist(user.wishlist);
-                      });
-                }
+            const hobbyList = document.getElementById('hobby-list');
+            hobbyList.innerHTML = '';
+            if (!data || data.length === 0) {
+                // This block may not be needed because the error will be caught
+                return;
             }
+            hobbyList.style.display = 'block';
+            data.forEach(hobby => {
+                const li = document.createElement('li');
+                const a = document.createElement('a');
+                a.href = `hobby-details.html?id=${hobby.id}`;
+                a.textContent = hobby.name;
+                li.appendChild(a);
+                hobbyList.appendChild(li);
+            });
         })
         .catch(error => {
-            alert(error.message);
+            // Handle the error case where the hobby was not found
+            if (confirm(`Sorry, ${query} is not yet offered, do you want to add it to your wishlist?`)) {
+                fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}/wishlist`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ hobbyName: query })
+                })
+                .then(response => response.json())
+                .then(user => {
+                    loadWishlist(user.wishlist);
+                });
+            }
         });
-    }
+    }    
     
     // Fetch and display tailored suggestions
     function loadTailoredSuggestions() {
