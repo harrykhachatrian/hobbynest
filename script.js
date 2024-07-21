@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function searchHobbies() {
-        const query = searchBar.value.trim().toLowerCase();
+        const query = formatHobbyName(searchBar.value.trim());
         if (query === '') {
             alert('Please enter a search term.');
             return;
@@ -43,22 +43,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             return response.json();
         })
-        .then(data => {
-            const hobbyList = document.getElementById('hobby-list');
-            hobbyList.innerHTML = '';
-            if (!data || data.length === 0) {
-                // This block may not be needed because the error will be caught
-                return;
-            }
-            hobbyList.style.display = 'block';
-            data.forEach(hobby => {
-                const li = document.createElement('li');
-                const a = document.createElement('a');
-                a.href = `hobby-details.html?id=${hobby.id}`;
-                a.textContent = hobby.name;
-                li.appendChild(a);
-                hobbyList.appendChild(li);
-            });
+        .then(hobby => {
+            window.location.href = `hobby-details.html?id=${hobby.id}`;
         })
         .catch(error => {
             // Handle the error case where the hobby was not found
@@ -76,7 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
         });
-    }    
+    }
     
     // Fetch and display tailored suggestions
     function loadTailoredSuggestions() {
