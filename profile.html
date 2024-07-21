@@ -15,22 +15,20 @@
     </header>
     <main>
         <h2>User Profile</h2>
-        <div id="user-info">
-            <p>Name: <span id="user-name"></span></p>
-            <p>Email: <span id="user-email"></span></p>
-            <p>Available Credits: <span id="user-credits"></span></p>
-            <button id="edit-profile-button">Edit Profile</button>
+        <div id="profile-view">
+            <p>Name: <span id="view-name"></span></p>
+            <p>Email: <span id="view-email"></span></p>
+            <p>Available Credits: <span id="view-credits"></span></p>
             <button id="add-credits-button">Add Credits</button>
+            <button id="edit-profile-button">Edit Profile</button>
         </div>
-        <form id="user-profile-form" style="display: none;">
+        <div id="edit-profile-form" style="display: none;">
             <label for="name">Name:</label>
             <input type="text" id="name" name="name">
             <label for="email">Email:</label>
             <input type="email" id="email" name="email">
-            <label for="credits">Credits:</label>
-            <input type="number" id="credits" name="credits" readonly>
-            <button type="submit">Save Changes</button>
-        </form>
+            <button id="save-profile-button">Save Changes</button>
+        </div>
 
         <h3>Interests</h3>
         <ul id="interests-list"></ul>

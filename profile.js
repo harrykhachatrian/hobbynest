@@ -1,24 +1,27 @@
 document.addEventListener('DOMContentLoaded', function() {
     const userId = 1; // Assuming a single user for simplicity
-    const userProfileForm = document.getElementById('user-profile-form');
-    const userInfo = document.getElementById('user-info');
+    const profileView = document.getElementById('profile-view');
+    const editProfileForm = document.getElementById('edit-profile-form');
+    const viewName = document.getElementById('view-name');
+    const viewEmail = document.getElementById('view-email');
+    const viewCredits = document.getElementById('view-credits');
+    const editProfileButton = document.getElementById('edit-profile-button');
+    const saveProfileButton = document.getElementById('save-profile-button');
+    const addCreditsButton = document.getElementById('add-credits-button');
     const interestsList = document.getElementById('interests-list');
     const newInterestInput = document.getElementById('new-interest');
     const addInterestButton = document.getElementById('add-interest-button');
     const upcomingClassesList = document.getElementById('upcoming-classes-list');
-    const editProfileButton = document.getElementById('edit-profile-button');
-    const addCreditsButton = document.getElementById('add-credits-button');
 
     function loadUserProfile() {
         fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}`)
             .then(response => response.json())
             .then(user => {
-                document.getElementById('user-name').textContent = user.name;
-                document.getElementById('user-email').textContent = user.email;
-                document.getElementById('user-credits').textContent = user.credits;
+                viewName.textContent = user.name;
+                viewEmail.textContent = user.email;
+                viewCredits.textContent = user.credits;
                 document.getElementById('name').value = user.name;
                 document.getElementById('email').value = user.email;
-                document.getElementById('credits').value = user.credits;
                 loadInterests(user.interests);
                 loadUpcomingClasses(user.exploredHobbies);
             });
@@ -79,7 +82,12 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    userProfileForm.addEventListener('submit', function(event) {
+    editProfileButton.addEventListener('click', function() {
+        profileView.style.display = 'none';
+        editProfileForm.style.display = 'block';
+    });
+
+    saveProfileButton.addEventListener('click', function(event) {
         event.preventDefault();
         const updatedUser = {
             name: document.getElementById('name').value,
@@ -94,15 +102,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }).then(response => response.json())
           .then(user => {
               alert('Profile updated successfully');
-              userInfo.style.display = 'block';
-              userProfileForm.style.display = 'none';
               loadUserProfile();
+              profileView.style.display = 'block';
+              editProfileForm.style.display = 'none';
           });
-    });
-
-    editProfileButton.addEventListener('click', function() {
-        userInfo.style.display = 'none';
-        userProfileForm.style.display = 'block';
     });
 
     addInterestButton.addEventListener('click', function() {
@@ -125,38 +128,34 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     addCreditsButton.addEventListener('click', function() {
-        const options = `
-            <div>
-                <h3>Add Credits</h3>
-                <button onclick="addCredits(6, 50)">Add 6 Credits for $50</button>
-                <button onclick="addCredits(12, 100)">Add 12 Credits for $100</button>
-                <button onclick="addCredits(18, 150)">Add 18 Credits for $150</button>
-            </div>
-        `;
-        const creditsPopup = document.createElement('div');
-        creditsPopup.innerHTML = options;
-        creditsPopup.id = 'credits-popup';
-        document.body.appendChild(creditsPopup);
-    });
-
-    window.addCredits = function(credits, cost) {
-        if (confirm(`Are you sure you want to add ${credits} credits for $${cost}?`)) {
-            fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}/credits`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ credits })
-            }).then(response => response.json())
-              .then(user => {
-                  document.getElementById('user-credits').textContent = user.credits;
-                  document.getElementById('credits').value = user.credits;
-                  document.getElementById('credits-popup').remove();
-              });
-        } else {
-            document.getElementById('credits-popup').remove();
+        const creditsToAdd = prompt("Add 6 Credits for $50\nAdd 12 Credits for $100\nAdd 18 Credits for $150");
+        let creditsAmount;
+        switch (creditsToAdd) {
+            case '6':
+                creditsAmount = 6;
+                break;
+            case '12':
+                creditsAmount = 12;
+                break;
+            case '18':
+                creditsAmount = 18;
+                break;
+            default:
+                alert('Invalid selection.');
+                return;
         }
-    };
+        fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/users/${userId}/credits`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ credits: creditsAmount })
+        }).then(response => response.json())
+          .then(user => {
+              alert(`Successfully added ${creditsAmount} credits.`);
+              loadUserProfile();
+          });
+    });
 
     loadUserProfile();
 });
