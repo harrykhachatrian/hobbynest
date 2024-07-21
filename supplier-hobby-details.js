@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const hobbyLocation = document.getElementById('hobby-location');
     const hobbyContact = document.getElementById('hobby-contact');
     const hobbyDuration = document.getElementById('hobby-duration');
-    const hobbyCreditCost = document.getElementById('hobby-credit-cost'); // New field for credit cost
+    const hobbyCreditCost = document.getElementById('hobby-credit-cost');
     const classDatesTable = document.getElementById('class-dates').getElementsByTagName('tbody')[0];
     const editHobbyButton = document.getElementById('edit-hobby-button');
     const editHobbyForm = document.getElementById('edit-hobby-form');
