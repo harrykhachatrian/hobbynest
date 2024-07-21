@@ -68,7 +68,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     const a = document.createElement('a');
                     a.href = `hobby-details.html?id=${hobby.id}`;
                     a.textContent = hobby.name;
+                    const reason = document.createElement('p');
+                    reason.textContent = `You told us you have ${hobby.interests.join(', ')} interests, we think you should check out ${hobby.name}`;
                     li.appendChild(a);
+                    li.appendChild(reason);
                     tailoredSuggestionsList.appendChild(li);
                 });
             });
@@ -260,7 +263,6 @@ document.addEventListener('DOMContentLoaded', function() {
     viewUserButton.addEventListener('click', function() {
         userView.style.display = 'block';
         supplierView.style.display = 'none';
-        loadHobbies();
         loadTrendingHobbies();
         loadHiddenGems();
         loadTailoredSuggestions();
@@ -330,9 +332,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     <form id="edit-hobby-form">
                         <label for="edit-description">Description:</label>
                         <input type="text" id="edit-description" value="${hobbyInfo.description}">
+                        <label for="edit-location">Location:</label>
+                        <input type="text" id="edit-location" value="${hobbyInfo.location}">
+                        <label for="edit-contact">Contact:</label>
+                        <input type="text" id="edit-contact" value="${hobbyInfo.contact}">
                         <label for="edit-dates">Dates and Times:</label>
                         <textarea id="edit-dates">${hobbyInfo.dates.map(dateInfo => `${dateInfo.date}: ${dateInfo.times.join(', ')}`).join('\n')}</textarea>
                         <button type="submit">Update</button>
+                        <button type="button" id="delete-hobby-button">Delete</button>
                     </form>
                 `;
                 document.getElementById('hobbies').style.display = 'none';
@@ -343,6 +350,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     event.preventDefault();
                     const updatedHobby = {
                         description: document.getElementById('edit-description').value,
+                        location: document.getElementById('edit-location').value,
+                        contact: document.getElementById('edit-contact').value,
                         dates: document.getElementById('edit-dates').value.split('\n').map(line => {
                             const [date, times] = line.split(': ');
                             return {
@@ -364,6 +373,22 @@ document.addEventListener('DOMContentLoaded', function() {
                           hobbyDetailsElement.style.display = 'none';
                           loadSupplierHobbies();
                       });
+                });
+
+                const deleteHobbyButton = document.getElementById('delete-hobby-button');
+                deleteHobbyButton.addEventListener('click', function() {
+                    if (confirm('Are you sure you want to delete this hobby?')) {
+                        fetch(`https://hobbynest-backend-8fa9b1d265bc.herokuapp.com/hobbies/${hobbyId}`, {
+                            method: 'DELETE'
+                        }).then(response => {
+                            if (response.ok) {
+                                alert('Hobby deleted successfully');
+                                window.location.href = 'index.html';
+                            } else {
+                                alert('Failed to delete hobby');
+                            }
+                        });
+                    }
                 });
             });
     }
