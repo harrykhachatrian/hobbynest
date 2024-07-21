@@ -107,7 +107,7 @@ ul {
     list-style: none;
 }
 
-ul#wishlist li, ul#hobby-list li, ul#trending-hobby-list li, ul#tailored-suggestions-list li, ul#hidden-gems-list li {
+ul#wishlist li, ul#hobby-list li, ul#trending-hobby-list li, ul#tailored-suggestions-list li, ul#hidden-gems-list li, ul#upcoming-classes-list li {
     margin-bottom: 8px; /* Add some space between list items for better readability */
     padding: 8px;
     background: white;
@@ -116,13 +116,14 @@ ul#wishlist li, ul#hobby-list li, ul#trending-hobby-list li, ul#tailored-suggest
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-ul#wishlist li:hover, ul#hobby-list li:hover, ul#trending-hobby-list li:hover, ul#tailored-suggestions-list li:hover, ul#hidden-gems-list li:hover {
+ul#wishlist li:hover, ul#hobby-list li:hover, ul#trending-hobby-list li:hover, ul#tailored-suggestions-list li:hover, ul#hidden-gems-list li:hover, ul#upcoming-classes-list li:hover {
     transform: translateY(-1px);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-ul#wishlist li button {
+ul#wishlist li button, ul#upcoming-classes-list li button {
     margin-left: 10px; /* Ensure there is a gap between text and button */
+    margin-right: 5px; /* Ensure there is a gap between buttons */
 }
 
 a {
